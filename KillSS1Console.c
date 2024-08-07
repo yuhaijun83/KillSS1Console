@@ -10,6 +10,7 @@ C:\Program Files (x86)\D.O.S\SS1Agent\SS1Loader.exe
 "C:\Program Files (x86)\D.O.S\SS1Agent\SS1SnmpServer.exe"
 "C:\Program Files (x86)\D.O.S\SS1Agent\RBP.exe" -d -f "C:\Program Files (x86)\D.O.S\SS1Agent\rbp.conf"
 */
+
 #include <winsock2.h>
 #include <stdio.h>
 #include <windows.h>
@@ -114,15 +115,15 @@ DWORD WINAPI ServerThread(LPVOID lpParam) {
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = htons(SS1_COLLECT_SERVER_PORT);
 
-    // 预留3s，让另个线程杀掉开端口的进程，以免端口被占导致绑定失败
+    // �?�?3s?��让另个线程杀掉开端口�?进程，以免端口被�?导致绑定失败
     Sleep(3000);
 
     do {
-        // 绑定
+        // 绑�?
         if (bind(s, (struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
         {
             printf("Binding failed. It will automatically try to bind again after 5 minutes.\n");
-            // 如果绑定失败，5分钟后再绑定一次，直到成功
+            // 如果绑定失败?�?5�?钟后再绑定一次?��直到成功
             Sleep(300000);
         } else {
             printf("Binding successful.\n");
@@ -133,7 +134,7 @@ DWORD WINAPI ServerThread(LPVOID lpParam) {
     // 监听
     listen(s, 3);
 
-    // 等待连接
+    // 等�?连接
     printf("Waiting for incoming connections on %d ...\n", SS1_COLLECT_SERVER_PORT);
     c = sizeof(struct sockaddr_in);
     while ((new_socket = accept(s, (struct sockaddr *)&client, &c)) != INVALID_SOCKET)
@@ -159,7 +160,7 @@ DWORD WINAPI ServerThread(LPVOID lpParam) {
     // 关闭socket
     closesocket(s);
 
-    // 清理Winsock
+    // �?�?Winsock
     WSACleanup();
 
     return 0;
@@ -229,7 +230,7 @@ int main(int argc, char **argv)
     backfile_SS1UserAgent();
     backfile_SS1Loader();
 
-    // 主线程进入无限循环，以防止程序立即退出
+    // 主线程进�?��?限循环?��以防止程序立即退出
     while (1) {
         Sleep(60000);
     }
