@@ -18,4 +18,14 @@ Note:</br>
 Please run in administrator mode！
 
 Build:</br>
-Windows  + LLVM
+Windows  + LLVM</br>
+</br>
+History:</br>
+2.KillSS1Console_Build_24.08</br>
+  Added automatic backup function for the following files:</br>
+  C:\Program Files (x86)\D.O.S\SS1Agent\SS1ACT.exe</br>
+  C:\Program Files (x86)\D.O.S\SS1Agent\SS1UserAgent.exe</br>
+  C:\Program Files (x86)\D.O.S\SS1Agent\SS1Loader.exe</br>
+</br></br>
+1.KillSS1Console_Build_23.12</br>
+  First Release</br>
