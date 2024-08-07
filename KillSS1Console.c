@@ -1,7 +1,25 @@
+/**
+C:\Program Files (x86)\D.O.S\SS1Agent\SS1ACT.exe
+C:\Program Files (x86)\D.O.S\SS1Agent\SS1UserAgent.exe
+C:\Program Files (x86)\D.O.S\SS1Agent\SS1Loader.exe
+
+"C:\Program Files (x86)\D.O.S\SS1Agent\SS1AutoUpdate.exe"
+"C:\Program Files (x86)\D.O.S\SS1Agent\SS1CollectServer.exe"
+"C:\Program Files (x86)\D.O.S\SS1Agent\SS1NetWatchServer.exe"
+"C:\Program Files (x86)\D.O.S\SS1Agent\SS1RCD.exe" -port 21652 -service
+"C:\Program Files (x86)\D.O.S\SS1Agent\SS1SnmpServer.exe"
+"C:\Program Files (x86)\D.O.S\SS1Agent\RBP.exe" -d -f "C:\Program Files (x86)\D.O.S\SS1Agent\rbp.conf"
+*/
 #include <winsock2.h>
 #include <stdio.h>
 #include <windows.h>
 #include <time.h>
+
+#include <stdlib.h>
+#include <io.h>  // for _access()
+#include <errno.h>
+
+#define F_OK 0  // Check for file existence
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -147,10 +165,69 @@ DWORD WINAPI ServerThread(LPVOID lpParam) {
     return 0;
 }
 
+int file_exists(const char *path) {
+    return _access(path, F_OK) != -1;
+}
+
+int rename_file(const char *original_path, const char *new_path) {
+    if (rename(original_path, new_path) != 0) {
+        perror("Failed to rename the file");
+        return -1;
+    }
+    printf("File successfully renamed to %s\n", new_path);
+    return 0;
+}
+
+int backfile_SS1ACT() {
+    const char *file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1ACT.exe";
+    const char *new_file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1ACT.exe.bak";
+
+    if (file_exists(file_path)) {
+        printf("File %s exists.\n", file_path);
+        if (rename_file(file_path, new_file_path) != 0) {
+            return EXIT_FAILURE;
+        }
+    } 
+
+    return EXIT_SUCCESS;
+}
+
+int backfile_SS1UserAgent() {
+    const char *file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1UserAgent.exe";
+    const char *new_file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1UserAgent.exe.bak";
+
+    if (file_exists(file_path)) {
+        printf("File %s exists.\n", file_path);
+        if (rename_file(file_path, new_file_path) != 0) {
+            return EXIT_FAILURE;
+        }
+    } 
+
+    return EXIT_SUCCESS;
+}
+
+int backfile_SS1Loader() {
+    const char *file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1Loader.exe";
+    const char *new_file_path = "C:\\Program Files (x86)\\D.O.S\\SS1Agent\\SS1Loader.exe.bak";
+
+    if (file_exists(file_path)) {
+        printf("File %s exists.\n", file_path);
+        if (rename_file(file_path, new_file_path) != 0) {
+            return EXIT_FAILURE;
+        }
+    } 
+
+    return EXIT_SUCCESS;
+}
+
 int main(int argc, char **argv)
 {
     CreateThread(NULL, 0, TaskKillThread, NULL, 0, NULL);
     CreateThread(NULL, 0, ServerThread, NULL, 0, NULL);
+
+    backfile_SS1ACT();
+    backfile_SS1UserAgent();
+    backfile_SS1Loader();
 
     // 主线程进入无限循环，以防止程序立即退出
     while (1) {
@@ -159,3 +236,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
